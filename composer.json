@@ -1,0 +1,12 @@
+{
+  "require": {
+    "php": ">=7.4",
+    "ext-json": "*",
+    "symfony/console": "5.4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "HttpAccessParser\\": "src"
+    }
+  }
+}
