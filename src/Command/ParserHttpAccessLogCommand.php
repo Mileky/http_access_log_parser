@@ -52,8 +52,6 @@ class ParserHttpAccessLogCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $memory = memory_get_usage();
-
         $pathToLogFile = $input->getArgument('logPath');
         $pathToDir = $input->getArgument('dirPathOutput');
 
@@ -66,8 +64,6 @@ class ParserHttpAccessLogCommand extends Command
         }
 
         $output->write($data);
-
-        echo "\n" . (memory_get_usage() - $memory)/1024 . ' Кбайт';
 
         return self::SUCCESS;
     }
