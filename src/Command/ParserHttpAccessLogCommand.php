@@ -78,10 +78,10 @@ class ParserHttpAccessLogCommand extends Command
      */
     private function validateParams($pathToLogFile, $pathToDir): void
     {
-        if (false === file_exists($pathToLogFile)) {
+        if (false === file_exists(__DIR__ . "/../../$pathToLogFile")) {
             throw new InvalidDataException('Не удалось найти файл с логами');
         }
-        if (false === is_dir($pathToDir)) {
+        if (false === is_dir(__DIR__ . "/../../$pathToDir")) {
             throw new InvalidDataException('Не удалось найти папку для сохранения результатов');
         }
     }
