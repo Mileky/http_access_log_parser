@@ -87,7 +87,6 @@ class ParsingHttpAccessService
      */
     public function run(string $pathToLogFile, string $pathToDir): string
     {
-
         $data = [];
 
         foreach ($this->fileRepository->loadData($pathToLogFile) as $row) {
@@ -106,13 +105,14 @@ class ParsingHttpAccessService
      */
     private function parsingData(string $row): array
     {
-        $pattern = '/(?<ip>[\d.]+)\s-\s-\s\[(?<time>[^\]]+)\]\s"(?<request>[^"]+)"\s(?<status>[\d]+)\s(?<traffic>[\d]+)\s"(?<url>[^"]+)"\s"(?<userAgent>[^"]+)"/';
+        $pattern = '/(?<ip>[\d.]+)\s-\s-\s\[(?<time>[^\]]+)\]\s"(?<type>[^"]+)\s(?<resource>\/[^"]+)' .
+        '\s(?<version>[^"]+)"\s(?<status>[\d]+)\s(?<traffic>[\d]+)\s"(?<url>[^"]+)"\s"(?<userAgent>[^"]+)"/';
 
         preg_match($pattern, $row, $matches);
 
         $this->buildViewsData();
 
-        $this->buildUrlsData($matches['url']);
+        $this->buildUrlsData($matches['url'], $matches['resource']);
 
         $this->buildTrafficData($matches['traffic']);
 
@@ -142,12 +142,15 @@ class ParsingHttpAccessService
     /**
      * Подготовка данных об уникальных URL
      *
-     * @param string $url - url, с которого пришел запрос
+     * @param string $host - хост URL
+     * @param string $resource - путь до ресура URL
      *
      * @return void
      */
-    private function buildUrlsData(string $url): void
+    private function buildUrlsData(string $host, string $resource): void
     {
+        $url = $host . $resource;
+
         if (false === in_array($url, $this->urls, true)) {
             $this->urls[] = $url;
         }
