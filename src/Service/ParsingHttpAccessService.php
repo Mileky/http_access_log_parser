@@ -114,7 +114,7 @@ class ParsingHttpAccessService
 
         $this->buildUrlsData($matches['url'], $matches['resource']);
 
-        $this->buildTrafficData($matches['traffic']);
+        $this->buildTrafficData($matches['traffic'], $matches['status']);
 
         $this->buildStatusCodeData($matches['status']);
 
@@ -161,12 +161,15 @@ class ParsingHttpAccessService
      * Подготовка данных об объёме трафика
      *
      * @param int $traffic - объем трафика
+     * @param int $status - код ответа http
      *
      * @return void
      */
-    private function buildTrafficData(int $traffic): void
+    private function buildTrafficData(int $traffic, int $status): void
     {
-        $this->traffic += $traffic;
+        if ($status !== 301) {
+            $this->traffic += $traffic;
+        }
     }
 
     /**
